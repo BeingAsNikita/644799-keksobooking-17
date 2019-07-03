@@ -7,7 +7,7 @@ var TYPE_OF_HOUSING = ['palace', 'flat', 'house', 'bungalo'];
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var MAP_PINS = document.querySelector('.map__pins');
 var similarAds = [];
-
+var fragment = document.createDocumentFragment();
 
 
 var getNumber = function (start, end) {
@@ -41,6 +41,7 @@ var getSimilarAds = function(quantity) {
     similarAds.push(similarAd)
   }
 }
+
 getSimilarAds(8)
 
 var renderAd = function(ad) {
@@ -53,14 +54,13 @@ var renderAd = function(ad) {
   return adElement
 }
 
-MAP.classList.remove('map--faded');
+var renderAds = function(ads) {
+  for (var i = 0; i < ads.length; i++) {
+    fragment.appendChild(renderAd(ads[i]));
+  }
 
-var fragment = document.createDocumentFragment();
-
-for (var i = 0; i < similarAds.length; i++) {
-  fragment.appendChild(renderAd(similarAds[i]));
-
+  MAP_PINS.appendChild(fragment)
 }
-  console.log(MAP_PINS.appendChild(fragment))
-MAP_PINS.appendChild(fragment)
 
+MAP.classList.remove('map--faded');
+renderAds(similarAds);
