@@ -14,11 +14,11 @@ var getNumber = function (start, end) {
   var rand = start - 0.5 + Math.random() * (end - start + 1);
   rand = Math.round(rand);
   return rand;
-}
+};
 
-var getAvatar  = function() {
-  return 'img/avatars/user0' + getNumber(1,8) + '.png'
-}
+var getAvatar = function() {
+  return 'img/avatars/user0' + getNumber(1, 8) + '.png'
+};
 
 var getTypeOfHousing = function(types) {
   return types[getNumber(0, types.length-1)]
@@ -34,13 +34,13 @@ var getSimilarAds = function(quantity) {
         type: getTypeOfHousing(TYPE_OF_HOUSING)
       },
       location: {
-        x: getNumber(0,LOCATION_WIDTH - PINS_WIDTH/2),
-        y: getNumber(130-PINS_HEIGHT/2,630-PINS_HEIGHT/2)
+        x: getNumber(0, LOCATION_WIDTH - PINS_WIDTH/2),
+        y: getNumber(130-PINS_HEIGHT/2, 630-PINS_HEIGHT/2)
       }
     }
     similarAds.push(similarAd)
   }
-}
+};
 
 getSimilarAds(8)
 
@@ -52,7 +52,7 @@ var renderAd = function(ad) {
   adElement.children[0].src = ad.author.avatar;
   adElement.children[0].alt = 'Заголовок объявления'
   return adElement
-}
+};
 
 var renderAds = function(ads) {
   for (var i = 0; i < ads.length; i++) {
@@ -60,7 +60,7 @@ var renderAds = function(ads) {
   }
 
   MAP_PINS.appendChild(fragment)
-}
+};
 
 MAP.classList.remove('map--faded');
 renderAds(similarAds);
