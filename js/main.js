@@ -14,30 +14,30 @@ var getAvatars = function(count) {
   var avatars = [];
 
   for ( var i = 1; i <= count; i++) {
-    avatars.push('img/avatars/user' + ((i > 9) ? i : '0'+i) + '.png')
+    avatars.push('img/avatars/user' + ((i > 9) ? i : '0'+i) + '.png');
   }
-  return avatars
+  return avatars;
 }
 
 var getNumberFromRange = function (start, end) {
-  return (start + Math.ceil(Math.random()*(end-start)))
+  return (start + Math.ceil(Math.random()*(end-start)));
 };
 
 var getTypeOfHousing = function(types) {
-  return types[getNumberFromRange(0, types.length-1)]
+  return types[getNumberFromRange(0, types.length-1)];
 }
 
 var getUniqueElementFromArray = function(arr) {
-  return arr.splice(getNumberFromRange(0, arr.length-1), 1)[0]
+  return arr.splice(getNumberFromRange(0, arr.length-1), 1)[0];
 }
 
 var getSimilarAds = function(quantity) {
   var result =[];
-  var avatarCopy = getAvatars(quantity).slice()
+  var avatars = getAvatars(quantity);
   for (var i = 0; i < quantity; i++) {
      result.push({
       author: {
-        avatar: getUniqueElementFromArray(avatarCopy)
+        avatar: getUniqueElementFromArray(avatars)
       },
       offer: {
         type: getTypeOfHousing(TYPE_OF_HOUSING)
@@ -48,7 +48,7 @@ var getSimilarAds = function(quantity) {
       }
     })
   }
-  return result
+  return result;
 };
 
 var renderAd = function(ad) {
@@ -57,18 +57,18 @@ var renderAd = function(ad) {
   adElement.style.left = ad.location.x + 'px';
   adElement.style.top = ad.location.y + 'px';
   adElement.children[0].src = ad.author.avatar;
-  adElement.children[0].alt = 'Заголовок объявления'
-  return adElement
+  adElement.children[0].alt = 'Заголовок объявления';
+  return adElement;
 };
 
 var renderAds = function(count) {
   var fragment = document.createDocumentFragment();
-  var  ads = getSimilarAds(count)
+  var  ads = getSimilarAds(count);
   for (var i = 0; i < ads.length; i++) {
     fragment.appendChild(renderAd(ads[i]));
   }
 
-  MAP_PINS.appendChild(fragment)
+  MAP_PINS.appendChild(fragment);
   MAP.classList.remove('map--faded');
 };
 
