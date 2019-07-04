@@ -8,24 +8,19 @@ var QUANTITY_PINS = 8;
 var TYPE_OF_HOUSING = ['palace', 'flat', 'house', 'bungalo'];
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var MAP_PINS = document.querySelector('.map__pins');
-var fragment = document.createDocumentFragment();
+
 
 var getAvatars = function(count) {
   var avatars = [];
-  var currentAvatar = 1;
-  while(avatars.length < count) {
-    avatars.push('0' + currentAvatar)
-    currentAvatar++
+
+  for ( var i = 1; i <= count; i++) {
+    avatars.push('img/avatars/user' + ((i > 9) ? i : '0'+i) + '.png')
   }
   return avatars
 }
 
 var getNumberFromRange = function (start, end) {
   return (start + Math.ceil(Math.random()*(end-start)))
-};
-
-var getAvatar = function(arr) {
-  return 'img/avatars/user' + getUniqueElementFromArray(arr) + '.png'
 };
 
 var getTypeOfHousing = function(types) {
@@ -42,7 +37,7 @@ var getSimilarAds = function(quantity) {
   for (var i = 0; i < quantity; i++) {
      result.push({
       author: {
-        avatar: getAvatar(avatarCopy)
+        avatar: getUniqueElementFromArray(avatarCopy)
       },
       offer: {
         type: getTypeOfHousing(TYPE_OF_HOUSING)
@@ -67,6 +62,7 @@ var renderAd = function(ad) {
 };
 
 var renderAds = function(count) {
+  var fragment = document.createDocumentFragment();
   var  ads = getSimilarAds(count)
   for (var i = 0; i < ads.length; i++) {
     fragment.appendChild(renderAd(ads[i]));
@@ -75,7 +71,6 @@ var renderAds = function(count) {
   MAP_PINS.appendChild(fragment)
   MAP.classList.remove('map--faded');
 };
-
 
 renderAds(QUANTITY_PINS);
 
