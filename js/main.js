@@ -8,6 +8,33 @@ var QUANTITY_PINS = 8;
 var TYPE_OF_HOUSING = ['palace', 'flat', 'house', 'bungalo'];
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var MAP_PINS = document.querySelector('.map__pins');
+var formAd = document.querySelector('.ad-form');
+var formFieldsets = document.querySelectorAll('fieldset');
+var mainPin = document.querySelector('.map__pin--main');
+var adsIsrender = false;
+var address = document.querySelector('#address');
+
+var getAddressСoordinates = function() {
+  address.value = (parseInt(mainPin.style.left, 10) - PINS_WIDTH/2) + ', ' + (parseInt(mainPin.style.top, 10) + PINS_HEIGHT);
+}
+
+var setInactiveMode = function (elements) {
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].setAttribute('disabled', 'true');
+  }
+};
+
+var setActiveMode = function (elements) {
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].removeAttribute('disabled');
+  }
+  formAd.classList.remove('ad-form--disabled');
+
+  if (!adsIsrender) {
+    renderAds(QUANTITY_PINS);
+    adsIsrender = true;
+  }
+};
 
 
 var getAvatars = function(count) {
@@ -72,7 +99,14 @@ var renderAds = function(count) {
   MAP.classList.remove('map--faded');
 };
 
-renderAds(QUANTITY_PINS);
+mainPin.addEventListener('click', function() {
+  setActiveMode(formFieldsets);
+})
+
+setInactiveMode(formFieldsets);
+getAddressСoordinates();
+
+
 
 
 
