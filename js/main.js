@@ -17,7 +17,6 @@ var address = document.querySelector('#address');
 var getAddressСoordinates = function() {
   address.value = (parseInt(mainPin.style.left, 10) - PINS_WIDTH/2) + ', ' + (parseInt(mainPin.style.top, 10) + PINS_HEIGHT);
 }
-console.log(getAddressСoordinates())
 
 var setInactiveMode = function (elements) {
   for (var i = 0; i < elements.length; i++) {
@@ -100,11 +99,13 @@ var renderAds = function(count) {
   MAP.classList.remove('map--faded');
 };
 
-setInactiveMode(formFieldsets);
-
 mainPin.addEventListener('click', function() {
   setActiveMode(formFieldsets);
 })
+
+setInactiveMode(formFieldsets);
+getAddressСoordinates();
+
 
 
 
