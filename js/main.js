@@ -8,7 +8,75 @@ var QUANTITY_PINS = 8;
 var TYPE_OF_HOUSING = ['palace', 'flat', 'house', 'bungalo'];
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var MAP_PINS = document.querySelector('.map__pins');
+var formAd = document.querySelector('.ad-form');
+var formFieldsets = document.querySelectorAll('fieldset');
+var formFilters = document.querySelector('.map__filters').querySelectorAll('*');
+var mainPin = document.querySelector('.map__pin--main');
+var adsIsrender = false;
+var address = document.querySelector('#address');
+var typeOfHousing = document.querySelector('#type');
+var typesOfHousing = typeOfHousing.querySelectorAll('*');
+var price = document.querySelector('#price');
+var timeIn = document.querySelector('#timein');
+var timeOut = document.querySelector('#timeout');
+var arrivalTimes = timeIn.querySelector('*');
 
+var period = function() {
+    switch(timeIn.value) {
+      case "12:00":
+        timeOut.selectedIndex = 0;
+      break;
+      case "13:00":
+        timeOut.selectedIndex = 1;
+      break;
+      case "14:00":
+        timeOut.selectedIndex = 2;
+      break;
+    }
+}
+
+var setTypeOfHousing = function() {
+  switch(typeOfHousing.value) {
+    case "bungalo":
+      price.setAttribute('min', '0');
+      price.setAttribute('placeholder', '0');
+    break;
+    case "flat":
+      price.setAttribute('min', '1000');
+      price.setAttribute('placeholder', '1000');
+    break;
+    case "house":
+      price.setAttribute('min', '5000');
+      price.setAttribute('placeholder', '5000');
+    break;
+    case "palace":
+      price.setAttribute('min', '10000');
+      price.setAttribute('placeholder', '10000');
+    break;
+  }
+}
+
+var getAddressСoordinates = function() {
+  address.value = (parseInt(mainPin.style.left, 10) - PINS_WIDTH/2) + ', ' + (parseInt(mainPin.style.top, 10) + PINS_HEIGHT);
+}
+
+var setInactiveMode = function (elements) {
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].setAttribute('disabled', 'true');
+  }
+};
+
+var setActiveMode = function (elements) {
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].removeAttribute('disabled');
+  }
+  formAd.classList.remove('ad-form--disabled');
+
+  if (!adsIsrender) {
+    renderAds(QUANTITY_PINS);
+    adsIsrender = true;
+  }
+};
 
 var getAvatars = function(count) {
   var avatars = [];
@@ -72,7 +140,25 @@ var renderAds = function(count) {
   MAP.classList.remove('map--faded');
 };
 
-renderAds(QUANTITY_PINS);
+mainPin.addEventListener('click', function() {
+  setActiveMode(formFieldsets);
+})
+
+mainPin.addEventListener('click', function() {
+  setActiveMode(formFilters);
+})
+
+typeOfHousing.addEventListener('change', function() {
+  setTypeOfHousing();
+})
+
+timeIn.addEventListener('change', function() {
+  period();
+})
+
+setInactiveMode(formFieldsets);
+setInactiveMode(formFilters);
+getAddressСoordinates();
 
 
 
