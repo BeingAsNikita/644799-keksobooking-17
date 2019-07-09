@@ -159,9 +159,3 @@ timeIn.addEventListener('change', function() {
 setInactiveMode(formFieldsets);
 setInactiveMode(formFilters);
 getAddressСoordinates();
-
-
-
-
-
-
