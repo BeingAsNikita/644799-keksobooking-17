@@ -2,6 +2,10 @@
 
 var MAP = document.querySelector('.map');
 var LOCATION_WIDTH = MAP.offsetWidth;
+var LOCATION_BORDER_TOP = 130;
+var LOCATION_BORDER_RIGHT = LOCATION_WIDTH;
+var LOCATION_BORDER_BOT = 630;
+var LOCATION_BORDER_LEFT = 0;
 var PINS_WIDTH = 50;
 var PINS_HEIGHT = 70;
 var QUANTITY_PINS = 8;
@@ -150,7 +154,6 @@ timeIn.addEventListener('change', function() {
 mainPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
 
-  var isPinsInZone = true;
   var startCoords = {
     x: evt.clientX,
     y: evt.clientY
@@ -158,9 +161,6 @@ mainPin.addEventListener('mousedown', function (evt) {
 
   var onMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
-    setActiveMode(formFieldsets);
-    setActiveMode(formFilters);
-    getAddressСoordinates();
 
     var shift = {
       x: startCoords.x - moveEvt.clientX,
@@ -172,22 +172,40 @@ mainPin.addEventListener('mousedown', function (evt) {
       y: moveEvt.clientY
     };
 
-    if (isPinsInZone) {
-      mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-      mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+
+    mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
+    mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
+
+    var mainPinTop = mainPin.offsetTop - shift.y;
+    var mainPinLeft = mainPin.offsetLeft - shift.x;
+
+    if (mainPinTop < LOCATION_BORDER_TOP) {
+      mainPinTop = LOCATION_BORDER_TOP;
     }
-    if (parseInt(mainPin.style.top, 10) >= (630 - PINS_HEIGHT) ||
-        parseInt(mainPin.style.top, 10) <= (130 - PINS_HEIGHT) ||
-        parseInt(mainPin.style.left, 10) < (- PINS_WIDTH/2) ||
-        parseInt(mainPin.style.left, 10) > (LOCATION_WIDTH - PINS_WIDTH/2)) {
-      isPinsInZone = false
+
+    if (mainPinTop > LOCATION_BORDER_BOT - PINS_HEIGHT) {
+      mainPinTop = LOCATION_BORDER_BOT - PINS_HEIGHT;
     }
+
+    if (mainPinLeft < LOCATION_BORDER_LEFT) {
+      mainPinLeft = LOCATION_BORDER_LEFT;
+    }
+
+    if (mainPinLeft > LOCATION_BORDER_RIGHT - PINS_WIDTH) {
+      mainPinLeft = LOCATION_BORDER_RIGHT - PINS_WIDTH;
+    }
+
+    mainPin.style.top = mainPinTop + 'px';
+    mainPin.style.left = mainPinLeft + 'px';
   };
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-    setActiveMode(formFieldsets);
-    setActiveMode(formFilters);
+    if (!adsIsrender) {
+      setActiveMode(formFieldsets);
+      setActiveMode(formFilters);
+    }
+
     getAddressСoordinates();
 
     document.removeEventListener('mousemove', onMouseMove);
