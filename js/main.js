@@ -173,8 +173,6 @@ mainPin.addEventListener('mousedown', function (evt) {
     };
 
 
-    mainPin.style.top = (mainPin.offsetTop - shift.y) + 'px';
-    mainPin.style.left = (mainPin.offsetLeft - shift.x) + 'px';
 
     var mainPinTop = mainPin.offsetTop - shift.y;
     var mainPinLeft = mainPin.offsetLeft - shift.x;
