@@ -6,6 +6,7 @@ var QUANTITY_PINS = 8;
 var adsIsrender = false;
 var formFieldsets = document.querySelectorAll('fieldset');
 var formFilters = document.querySelector('.map__filters').querySelectorAll('*');
+var formAd = document.querySelector('.ad-form');
 
 var setInactiveMode = function (elements) {
   for (var i = 0; i < elements.length; i++) {
@@ -18,10 +19,10 @@ var setActiveMode = function (elements) {
     elements[i].removeAttribute('disabled');
   }
 
-  window.formAd.classList.remove('ad-form--disabled');
+  formAd.classList.remove('ad-form--disabled');
 
   if (!adsIsrender) {
-    window.renderAds(QUANTITY_PINS);
+    window.renderAds.render(QUANTITY_PINS);
     adsIsrender = true;
   }
 };
@@ -29,10 +30,12 @@ var setActiveMode = function (elements) {
 setInactiveMode(formFieldsets);
 setInactiveMode(formFilters);
 
-window.setInactiveMode = setInactiveMode;
-window.setActiveMode = setActiveMode;
-window.formFieldsets = formFieldsets;
-window.formFilters = formFilters;
-window.adsIsrender = adsIsrender;
-window.QUANTITY_PINS = QUANTITY_PINS;
+window.mode = {
+  setActive: setActiveMode,
+  setInactive: setInactiveMode,
+  fieldsets: formFieldsets,
+  filters: formFilters,
+  statusRender: adsIsrender,
+}
+
 })();

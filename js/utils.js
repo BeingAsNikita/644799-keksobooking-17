@@ -3,10 +3,6 @@
 (function() {
 
 
-var mainPin = document.querySelector('.map__pin--main');
-var PINS_WIDTH = 50;
-var PINS_HEIGHT = 70;
-
 var getAvatars = function(count) {
   var avatars = [];
 
@@ -28,11 +24,11 @@ var getUniqueElementFromArray = function(arr) {
   return arr.splice(getNumberFromRange(0, arr.length-1), 1)[0];
 }
 
-window.mainPin = mainPin;
-window.PINS_WIDTH = PINS_WIDTH;
-window.PINS_HEIGHT = PINS_HEIGHT;
-window.getAvatars = getAvatars;
-window.getUniqueElementFromArray = getUniqueElementFromArray;
-window.getTypeOfHousing = getTypeOfHousing;
-window.getNumberFromRange = getNumberFromRange;
+window.utils = {
+  getAvatars: getAvatars,
+  getUniqueElement: getUniqueElementFromArray,
+  getTypeOfHousing: getTypeOfHousing,
+  getNumber: getNumberFromRange
+}
+
 })();
