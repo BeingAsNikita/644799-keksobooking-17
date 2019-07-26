@@ -2,7 +2,6 @@
 
 (function() {
 
-var QUANTITY_PINS = 8;
 var adsIsrender = false;
 var formFieldsets = document.querySelectorAll('fieldset');
 var formFilters = document.querySelector('.map__filters').querySelectorAll('*');
@@ -22,7 +21,7 @@ var setActiveMode = function (elements) {
   formAd.classList.remove('ad-form--disabled');
 
   if (!adsIsrender) {
-    window.renderAds.render(QUANTITY_PINS);
+    window.backend.load(window.renderAds.render, window.renderAds.error);
     adsIsrender = true;
   }
 };

@@ -2,29 +2,9 @@
 
 (function() {
 
-var TYPE_OF_HOUSING = ['palace', 'flat', 'house', 'bungalo'];
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var MAP_PINS = document.querySelector('.map__pins');
-
-var getSimilarAds = function(quantity) {
-  var result =[];
-  var avatars = window.utils.getAvatars(quantity);
-  for (var i = 0; i < quantity; i++) {
-     result.push({
-      author: {
-        avatar: window.utils.getUniqueElement(avatars)
-      },
-      offer: {
-        type: window.utils.getTypeOfHousing(TYPE_OF_HOUSING)
-      },
-      location: {
-        x: window.utils.getNumber(0, window.map.mapWidth - window.map.pinWidth/2),
-        y: window.utils.getNumber(window.map.borderTop - window.map.pinHeight/2, window.map.borderBot - window.map.pinHeight/2)
-      }
-    })
-  }
-  return result;
-};
+var errorPopup = document.querySelector('#error').content.querySelector('.error');
 
 var renderAd = function(ad) {
   var adElement = pinTemplate.cloneNode(true);
@@ -36,9 +16,9 @@ var renderAd = function(ad) {
   return adElement;
 };
 
-var renderAds = function(count) {
+var renderAds = function(ads) {
+
   var fragment = document.createDocumentFragment();
-  var  ads = getSimilarAds(count);
   for (var i = 0; i < ads.length; i++) {
     fragment.appendChild(renderAd(ads[i]));
   }
@@ -47,8 +27,14 @@ var renderAds = function(count) {
   window.map.element.classList.remove('map--faded');
 };
 
+var errorHandler = function() {
+  var addErrorPopup = errorPopup.cloneNode(true);
+  document.body.insertAdjacentElement('afterbegin', addErrorPopup);
+}
+
 window.renderAds = {
-  render: renderAds
+  render: renderAds,
+  error: errorHandler
 }
 
 })();
