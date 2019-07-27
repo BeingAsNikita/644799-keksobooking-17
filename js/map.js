@@ -40,16 +40,16 @@ mainPin.addEventListener('mousedown', function (evt) {
       mainPinTop = LOCATION_BORDER_TOP;
     }
 
-    if (mainPinTop > LOCATION_BORDER_BOT - window.PINS_HEIGHT) {
-      mainPinTop = LOCATION_BORDER_BOT - window.PINS_HEIGHT;
+    if (mainPinTop > LOCATION_BORDER_BOT - PINS_HEIGHT) {
+      mainPinTop = LOCATION_BORDER_BOT - PINS_HEIGHT;
     }
 
     if (mainPinLeft < LOCATION_BORDER_LEFT) {
       mainPinLeft = LOCATION_BORDER_LEFT;
     }
 
-    if (mainPinLeft > LOCATION_BORDER_RIGHT - window.PINS_WIDTH) {
-      mainPinLeft = LOCATION_BORDER_RIGHT - window.PINS_WIDTH;
+    if (mainPinLeft > LOCATION_BORDER_RIGHT - PINS_WIDTH) {
+      mainPinLeft = LOCATION_BORDER_RIGHT - PINS_WIDTH;
     }
 
     mainPin.style.top = mainPinTop + 'px';
