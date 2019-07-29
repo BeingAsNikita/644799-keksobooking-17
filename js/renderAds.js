@@ -5,6 +5,7 @@
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var MAP_PINS = document.querySelector('.map__pins');
 var errorPopup = document.querySelector('#error').content.querySelector('.error');
+var totalAds = [];
 
 var renderAd = function(ad) {
   var adElement = pinTemplate.cloneNode(true);
@@ -17,10 +18,12 @@ var renderAd = function(ad) {
 };
 
 var renderAds = function(ads) {
+  totalAds = window.filter.typeOfHousingFilter(ads);
 
+  var minAds = totalAds.length > 5 ? 5 : totalAds.length;
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < ads.length; i++) {
-    fragment.appendChild(renderAd(ads[i]));
+  for (var i = 0; i < minAds; i++) {
+    fragment.appendChild(renderAd(totalAds[i]));
   }
 
   MAP_PINS.appendChild(fragment);
