@@ -9,11 +9,15 @@ var totalAds = [];
 
 var renderAd = function(ad) {
   var adElement = pinTemplate.cloneNode(true);
-
   adElement.style.left = ad.location.x + 'px';
   adElement.style.top = ad.location.y + 'px';
   adElement.children[0].src = ad.author.avatar;
   adElement.children[0].alt = 'Заголовок объявления';
+
+  adElement.addEventListener('click', function() {
+    window.card.render(ad);
+  });
+
   return adElement;
 };
 
