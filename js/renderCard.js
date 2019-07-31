@@ -2,6 +2,7 @@
 
 (function() {
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var ESC_KEYCODE = 27;
 
 var types = {
   flat: 'Квартира',
@@ -37,6 +38,9 @@ var addFeatures = function(ad, element) {
 };
 
 
+
+
+
 var renderCard = function(ad) {
   var card = document.querySelector('.map__card');
   var cardElement = cardTemplate.cloneNode(true);
@@ -56,9 +60,23 @@ var renderCard = function(ad) {
   addPhotos(ad, cardElement);
   addFeatures(ad, cardElement)
 
-
-
   window.map.element.appendChild(cardElement);
+
+  var cardClose = cardElement.querySelector('.popup__close');
+
+
+  var onCardEscPress = function(evt) {
+    if (evt.keyCode === ESC_KEYCODE) {
+      cardElement.remove();
+    }
+  };
+
+  document.addEventListener('keydown', onCardEscPress);
+
+  cardClose.addEventListener('click', function() {
+    cardElement.remove();
+    document.removeEventListener('keydown', onCardEscPress);
+  })
 };
 
 window.card = {
