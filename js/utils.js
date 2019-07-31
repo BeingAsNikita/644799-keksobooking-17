@@ -2,6 +2,28 @@
 
 (function() {
 
+var adsIsrender = false;
+
+var formAd = document.querySelector('.ad-form');
+
+var setInactiveMode = function (elements) {
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].setAttribute('disabled', 'true');
+  }
+};
+
+var setActiveMode = function (elements, render, error) {
+  for (var i = 0; i < elements.length; i++) {
+    elements[i].removeAttribute('disabled');
+  }
+
+  formAd.classList.remove('ad-form--disabled');
+
+  if (!adsIsrender) {
+    window.backend.load(render, error);
+    adsIsrender = true;
+  }
+};
 
 var getAvatars = function(count) {
   var avatars = [];
@@ -24,11 +46,16 @@ var getUniqueElementFromArray = function(arr) {
   return arr.splice(getNumberFromRange(0, arr.length-1), 1)[0];
 }
 
+
+
 window.utils = {
   getAvatars: getAvatars,
   getUniqueElement: getUniqueElementFromArray,
   getTypeOfHousing: getTypeOfHousing,
-  getNumber: getNumberFromRange
+  getNumber: getNumberFromRange,
+  setActive: setActiveMode,
+  setInactive: setInactiveMode,
+  statusRender: adsIsrender,
 }
 
 })();

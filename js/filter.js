@@ -24,7 +24,7 @@ var hideAds = function() {
 
 typeOfHousingFilter.addEventListener('change', function() {
   hideAds();
-  window.backend.load(window.renderAds.render, window.renderAds.error);
+  window.backend.load(window.map.render, window.map.error);
 })
 
 window.filter = {
