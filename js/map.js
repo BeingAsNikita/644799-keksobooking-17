@@ -11,6 +11,46 @@ var LOCATION_BORDER_RIGHT = LOCATION_WIDTH;
 var LOCATION_BORDER_BOT = 630;
 var LOCATION_BORDER_LEFT = 0;
 var mainPin = document.querySelector('.map__pin--main');
+var formFieldsets = document.querySelectorAll('fieldset');
+var formFilters = document.querySelector('.map__filters').querySelectorAll('*');
+var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+var MAP_PINS = document.querySelector('.map__pins');
+var errorPopup = document.querySelector('#error').content.querySelector('.error');
+var totalAds = [];
+var adsIsrender = false;
+
+var renderAd = function(ad) {
+  var adElement = pinTemplate.cloneNode(true);
+  adElement.style.left = ad.location.x + 'px';
+  adElement.style.top = ad.location.y + 'px';
+  adElement.children[0].src = ad.author.avatar;
+  adElement.children[0].alt = 'Заголовок объявления';
+
+  adElement.addEventListener('click', function() {
+    window.card.render(ad);
+  });
+
+  return adElement;
+};
+
+var renderAds = function(ads) {
+  totalAds = window.filter.typeOfHousingFilter(ads);
+
+  var minAds = totalAds.length > 5 ? 5 : totalAds.length;
+  var fragment = document.createDocumentFragment();
+  for (var i = 0; i < minAds; i++) {
+    fragment.appendChild(renderAd(totalAds[i]));
+  }
+
+  MAP_PINS.appendChild(fragment);
+  window.map.element.classList.remove('map--faded');
+};
+
+var errorHandler = function() {
+  var addErrorPopup = errorPopup.cloneNode(true);
+  document.body.insertAdjacentElement('afterbegin', addErrorPopup);
+}
+
 
 mainPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
@@ -58,9 +98,11 @@ mainPin.addEventListener('mousedown', function (evt) {
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-    if (!window.mode.statusRender) {
-      window.mode.setActive(window.mode.fieldsets);
-      window.mode.setActive(window.mode.filters);
+    if (!adsIsrender) {
+      window.utils.setActive(formFieldsets);
+      window.utils.setActive(formFilters);
+      window.backend.load(renderAds, errorHandler);
+      adsIsrender = true;
     }
 
     window.form.getCoords(mainPin.style.left, mainPin.style.top);
@@ -73,6 +115,9 @@ mainPin.addEventListener('mousedown', function (evt) {
   document.addEventListener('mouseup', onMouseUp);
 });
 
+window.utils.setInactive(formFieldsets);
+window.utils.setActive(formFilters);
+
 window.map = {
   element: MAP,
   pin: mainPin,
@@ -80,7 +125,9 @@ window.map = {
   pinHeight: PINS_HEIGHT,
   mapWidth: LOCATION_WIDTH,
   borderTop: LOCATION_BORDER_TOP,
-  borderBot: LOCATION_BORDER_BOT
+  borderBot: LOCATION_BORDER_BOT,
+  render: renderAds,
+  error: errorHandler,
 }
 
 })();
