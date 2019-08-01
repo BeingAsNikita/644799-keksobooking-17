@@ -17,7 +17,7 @@ var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pi
 var MAP_PINS = document.querySelector('.map__pins');
 var errorPopup = document.querySelector('#error').content.querySelector('.error');
 var totalAds = [];
-
+var adsIsrender = false;
 
 var renderAd = function(ad) {
   var adElement = pinTemplate.cloneNode(true);
@@ -98,9 +98,11 @@ mainPin.addEventListener('mousedown', function (evt) {
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-    if (!window.utils.statusRender) {
-      window.utils.setActive(formFieldsets,window.map.render, window.map.error);
-      window.utils.setActive(formFilters,window.map.render, window.map.error);
+    if (!adsIsrender) {
+      window.utils.setActive(formFieldsets);
+      window.utils.setActive(formFilters);
+      window.backend.load(renderAds, errorHandler);
+      adsIsrender = true;
     }
 
     window.form.getCoords(mainPin.style.left, mainPin.style.top);
@@ -125,7 +127,7 @@ window.map = {
   borderTop: LOCATION_BORDER_TOP,
   borderBot: LOCATION_BORDER_BOT,
   render: renderAds,
-  error: errorHandler
+  error: errorHandler,
 }
 
 })();
