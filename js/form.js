@@ -1,13 +1,25 @@
 'use strict';
 
 (function() {
-
-
+var formAd = document.querySelector('.ad-form');
 var address = document.querySelector('#address');
 var typeOfHousing = document.querySelector('#type');
 var price = document.querySelector('#price');
 var timeIn = document.querySelector('#timein');
 var timeOut = document.querySelector('#timeout');
+var rooms = document.querySelector('#room_number');
+var guests = document.querySelector('#capacity');
+
+
+var isGuestsEqualsRooms = function(evt) {
+  if(rooms.value >= guests.value ) {
+    formAd.submit();
+  } else {
+    evt.preventDefault();
+    rooms.setCustomValidity('Число комнат не соответствует числу гостей');
+  }
+  formAd.removeEventListener('submit', isGuestsEqualsRooms);
+}
 
 var onChangeTimeIn = function(evt) {
   timeOut.value = evt.target.value;
@@ -44,8 +56,12 @@ typeOfHousing.addEventListener('change', function() {
 
 timeIn.addEventListener('change', onChangeTimeIn);
 
+formAd.addEventListener('submit', isGuestsEqualsRooms)
+
 window.form = {
-  getCoords: getAddressСoordinates
+  getCoords: getAddressСoordinates,
+  rooms: rooms,
+  guests: guests
 };
 
 })();
