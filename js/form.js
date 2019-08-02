@@ -11,12 +11,12 @@ var rooms = document.querySelector('#room_number');
 var guests = document.querySelector('#capacity');
 
 
-var isGuestsEqualsRooms = function(evt) {
+var isGuestsEqualsRooms = function() {
   if(rooms.value >= guests.value ) {
-    formAd.submit();
+    return true
   } else {
-    evt.preventDefault();
     rooms.setCustomValidity('Число комнат не соответствует числу гостей');
+    return false
   }
   formAd.removeEventListener('submit', isGuestsEqualsRooms);
 }
@@ -50,13 +50,32 @@ var getAddressСoordinates = function(left, top) {
   address.value = (parseInt(left, 10) + window.map.pinWidth/2) + ', ' + (parseInt(top, 10) + window.map.pinHeight);
 }
 
+var errorHandler = function(errorMessage) {
+  var errorPopup = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+
+  errorPopup.querySelector('.error__message').textContent = errorMessage;
+  document.querySelector('main').appendChild(errorPopup);
+
+}
+
+var successHandler = function() {
+  if (isGuestsEqualsRooms())
+
+  var errorPopup = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
+  document.querySelector('main').appendChild(errorPopup);
+}
+
 typeOfHousing.addEventListener('change', function() {
   setTypeOfHousing();
 })
 
 timeIn.addEventListener('change', onChangeTimeIn);
 
-formAd.addEventListener('submit', isGuestsEqualsRooms)
+formAd.addEventListener('submit', function(evt) {
+  evt.preventDefault();
+  window.backend.send(new FormData(formAd), successHandler, errorHandler);
+});
+
 
 window.form = {
   getCoords: getAddressСoordinates,
