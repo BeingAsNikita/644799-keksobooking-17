@@ -4,27 +4,29 @@
 
 var PINS_WIDTH = 50;
 var PINS_HEIGHT = 70;
-var MAP = document.querySelector('.map');
-var LOCATION_WIDTH = MAP.offsetWidth;
+var map = document.querySelector('.map');
+var LOCATION_WIDTH = map.offsetWidth;
 var LOCATION_BORDER_TOP = 130;
 var LOCATION_BORDER_RIGHT = LOCATION_WIDTH;
 var LOCATION_BORDER_BOT = 630;
 var LOCATION_BORDER_LEFT = 0;
+var ADS_COUNT_DEFAULT = 5;
 var mainPin = document.querySelector('.map__pin--main');
 var formFieldsets = document.querySelectorAll('fieldset');
 var formFilters = document.querySelector('.map__filters').querySelectorAll('*');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-var MAP_PINS = document.querySelector('.map__pins');
+var pins = document.querySelector('.map__pins');
 var errorPopup = document.querySelector('#error').content.querySelector('.error');
 var totalAds = [];
 var adsIsrender = false;
+var formAd = document.querySelector('.ad-form');
 
 var renderAd = function(ad) {
   var adElement = pinTemplate.cloneNode(true);
   adElement.style.left = ad.location.x + 'px';
   adElement.style.top = ad.location.y + 'px';
-  adElement.children[0].src = ad.author.avatar;
-  adElement.children[0].alt = 'Заголовок объявления';
+  adElement.querySelector('img').src = ad.author.avatar;
+  adElement.querySelector('img').alt = 'Заголовок объявления';
 
   adElement.addEventListener('click', function() {
     window.card.render(ad);
@@ -36,13 +38,12 @@ var renderAd = function(ad) {
 var renderAds = function(ads) {
   totalAds = window.filter.typeOfHousingFilter(ads);
 
-  var minAds = totalAds.length > 5 ? 5 : totalAds.length;
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < minAds; i++) {
+  for (var i = 0; i < Math.min(totalAds.length, ADS_COUNT_DEFAULT); i++) {
     fragment.appendChild(renderAd(totalAds[i]));
   }
 
-  MAP_PINS.appendChild(fragment);
+  pins.appendChild(fragment);
   window.map.element.classList.remove('map--faded');
 };
 
@@ -99,8 +100,8 @@ mainPin.addEventListener('mousedown', function (evt) {
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
     if (!adsIsrender) {
-      window.utils.setActive(formFieldsets);
-      window.utils.setActive(formFilters);
+      window.utils.setActive(formFieldsets,formAd);
+      window.utils.setActive(formFilters,formAd);
       window.backend.load(renderAds, errorHandler);
       adsIsrender = true;
     }
@@ -116,10 +117,10 @@ mainPin.addEventListener('mousedown', function (evt) {
 });
 
 window.utils.setInactive(formFieldsets);
-window.utils.setActive(formFilters);
+window.utils.setInactive(formFilters);
 
 window.map = {
-  element: MAP,
+  element: map,
   pin: mainPin,
   pinWidth: PINS_WIDTH,
   pinHeight: PINS_HEIGHT,

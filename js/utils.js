@@ -1,8 +1,6 @@
 'use strict';
 
 (function() {
-
-var formAd = document.querySelector('.ad-form');
 var ESC_KEYCODE = 27;
 
 var setInactiveMode = function (elements) {
@@ -11,12 +9,12 @@ var setInactiveMode = function (elements) {
   }
 };
 
-var setActiveMode = function (elements) {
+var setActiveMode = function (elements, desabledElement) {
   for (var i = 0; i < elements.length; i++) {
     elements[i].removeAttribute('disabled');
   }
 
-  formAd.classList.remove('ad-form--disabled');
+  desabledElement.classList.remove('ad-form--disabled');
 };
 
 var isEscPressed = function(evt, callback) {
