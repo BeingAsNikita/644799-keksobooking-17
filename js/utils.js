@@ -23,7 +23,6 @@ var isEscPressed = function(evt, callback, element) {
   }
 }
 
-
 var closePopup = function(element) {
   element.remove()
 }
