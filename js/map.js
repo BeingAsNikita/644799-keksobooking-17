@@ -42,7 +42,7 @@ var renderAd = function(ad) {
 };
 
 var renderAds = function(ads) {
-  totalAds = window.filter.typeOfHousingFilter(ads);
+  totalAds = window.filter.filter(ads);
 
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < Math.min(totalAds.length, ADS_COUNT_DEFAULT); i++) {
