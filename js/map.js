@@ -5,6 +5,12 @@
 var PINS_WIDTH = 50;
 var PINS_HEIGHT = 70;
 var map = document.querySelector('.map');
+
+var MAIN_PIN_START_COORDS = {
+  x: 570,
+  y: 375
+};
+
 var LOCATION_WIDTH = map.offsetWidth;
 var LOCATION_BORDER_TOP = 130;
 var LOCATION_BORDER_RIGHT = LOCATION_WIDTH;
@@ -116,6 +122,26 @@ mainPin.addEventListener('mousedown', function (evt) {
   document.addEventListener('mouseup', onMouseUp);
 });
 
+
+var resetMap = function() {
+  var avtivePins = map.querySelectorAll('.map__pin');
+  for (var i = 0; i < avtivePins.length; i++) {
+    if(!avtivePins[i].classList.contains('map__pin--main')) {
+      avtivePins[i].remove();
+    }
+  }
+
+  mainPin.style.top = MAIN_PIN_START_COORDS.y + 'px';
+  mainPin.style.left = MAIN_PIN_START_COORDS.x + 'px';
+
+  formAd.reset();
+  formAd.classList.add('ad-form--disabled');
+  window.utils.setInactive(formFieldsets,formAd);
+  window.utils.setInactive(formFilters,formAd);
+  map.classList.add('map--faded');
+  adsIsrender = false;
+}
+
 window.utils.setInactive(formFieldsets);
 window.utils.setInactive(formFilters);
 
@@ -129,6 +155,7 @@ window.map = {
   borderBot: LOCATION_BORDER_BOT,
   render: renderAds,
   error: errorHandler,
+  reset: resetMap
 }
 
 })();

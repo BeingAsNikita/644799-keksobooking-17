@@ -17,16 +17,33 @@ var setActiveMode = function (elements, desabledElement) {
   desabledElement.classList.remove('ad-form--disabled');
 };
 
-var isEscPressed = function(evt, callback) {
+var isEscPressed = function(evt, callback, element) {
   if (evt.keyCode === ESC_KEYCODE) {
-    callback();
+    callback(element);
   }
+}
+
+
+var closePopup = function(element) {
+  element.remove()
+}
+
+var closingPopup = function(element, closeButton) {
+    document.addEventListener('keydown', function(evt) {
+      isEscPressed(evt, closePopup, element);
+    });
+
+    closeButton.addEventListener('click', function() {
+    closePopup(element)
+    document.removeEventListener('keydown', isEscPressed, element);
+  })
 }
 
 window.utils = {
   setActive: setActiveMode,
   setInactive: setInactiveMode,
-  isEscPressed: isEscPressed
+  isEscPressed: isEscPressed,
+  closingPopup: closingPopup
 }
 
 })();
