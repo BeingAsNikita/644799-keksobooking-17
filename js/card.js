@@ -61,18 +61,15 @@ var renderCard = function(ad) {
 
   var cardCloseButton = cardElement.querySelector('.popup__close');
 
-  var closeCard = function() {
-    cardElement.remove();
-  };
-
-  document.addEventListener('keydown',  function(evt) {
-    window.utils.isEscPressed(evt, closeCard);
+  window.utils.closingPopup(cardElement,cardCloseButton);
+/*  document.addEventListener('keydown',  function(evt) {
+    window.utils.isEscPressed(evt, window.utils.closePopup, cardElement);
   });
 
   cardCloseButton.addEventListener('click', function() {
-    closeCard()
+    window.utils.closePopup(cardElement)
     document.removeEventListener('keydown', window.utils.isEscPressed);
-  })
+  })*/
 };
 
 window.card = {
