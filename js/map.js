@@ -124,12 +124,7 @@ mainPin.addEventListener('mousedown', function (evt) {
 
 
 var resetMap = function() {
-  var avtivePins = map.querySelectorAll('.map__pin');
-  for (var i = 0; i < avtivePins.length; i++) {
-    if(!avtivePins[i].classList.contains('map__pin--main')) {
-      avtivePins[i].remove();
-    }
-  }
+  window.utils.hidePins()
 
   mainPin.style.top = MAIN_PIN_START_COORDS.y + 'px';
   mainPin.style.left = MAIN_PIN_START_COORDS.x + 'px';

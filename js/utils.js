@@ -1,7 +1,9 @@
 'use strict';
 
 (function() {
+
 var ESC_KEYCODE = 27;
+var DEBOUNCE_INTERVAL = 5000;
 
 var setInactiveMode = function (elements) {
   for (var i = 0; i < elements.length; i++) {
@@ -23,6 +25,16 @@ var isEscPressed = function(evt, callback, element) {
   }
 }
 
+var isContains = function(where, what){
+  for(var i = 0; i < what.length; i++){
+    if(where.indexOf(what[i]) === -1) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 var closePopup = function(element) {
   element.remove()
 }
@@ -38,11 +50,37 @@ var closingPopup = function(element, closeButton) {
   })
 }
 
+var hidePins = function() {
+  var activeAds = document.querySelectorAll('.map__pin');
+  for (var i = 0; i < activeAds.length; i++) {
+    if(!activeAds[i].classList.contains('map__pin--main')) {
+      activeAds[i].remove();
+    }
+  }
+}
+
+var debounce = function (cb) {
+    var lastTimeout = null;
+
+    return function() {
+      var parameters = arguments;
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(function() {
+        cb.apply(null, parameters);
+      }, DEBOUNCE_INTERVAL);
+    };
+  };
+
 window.utils = {
   setActive: setActiveMode,
   setInactive: setInactiveMode,
   isEscPressed: isEscPressed,
-  closingPopup: closingPopup
+  closingPopup: closingPopup,
+  contains: isContains,
+  hidePins: hidePins,
+  debounce: debounce
 }
 
 })();

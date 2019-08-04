@@ -9,10 +9,10 @@ var housingGuests = document.querySelector('#housing-guests');
 var housingFeaturesFieldset = document.querySelector('#housing-features');
 
 var filteredAds = [];
-var activeFeatures = [];
 
-var getFeatures = function() {
+var getCheckedFeatures = function() {
   var features = housingFeaturesFieldset.querySelectorAll('.map__checkbox');
+  var activeFeatures = [];
   for( var i = 0; i < features.length; i++) {
     if(features[i].checked) {
       activeFeatures.push(features[i].value)
@@ -20,7 +20,7 @@ var getFeatures = function() {
   }
   return activeFeatures
 }
-getFeatures();
+
 
 
 var filterAds = function(ads) {
@@ -28,7 +28,8 @@ var filterAds = function(ads) {
   if (housingType.value === 'any' &&
       housingPrice.value === 'any' &&
       housingRooms.value === 'any' &&
-      housingGuests.value === 'any') {
+      housingGuests.value === 'any' &&
+      getCheckedFeatures() === []) {
     return filteredAds
   }
 
@@ -72,35 +73,34 @@ var filterAds = function(ads) {
     }
   }
 
+  filteredAds = filteredAds.filter( function(it) {
+    return window.utils.contains(it.offer.features, getCheckedFeatures()) === true;
+  });
+
+
   return filteredAds
 };
 
 
-var hideAds = function() {
-  var activeAds = document.querySelectorAll('.map__pin');
-  for (var i = 0; i < activeAds.length; i++) {
-    activeAds[i].remove();
-  }
-}
+
 
 housingType.addEventListener('change', function() {
-  hideAds();
-
+  window.utils.hidePins()
   window.backend.load(window.map.render, window.map.error);
 });
 
 housingPrice.addEventListener('change', function() {
-  hideAds();
+  window.utils.hidePins()
   window.backend.load(window.map.render, window.map.error);
 });
 
 housingRooms.addEventListener('change', function() {
-  hideAds();
+  window.utils.hidePins()
   window.backend.load(window.map.render, window.map.error);
 });
 
 housingGuests.addEventListener('change', function() {
-  hideAds();
+  window.utils.hidePins()
   window.backend.load(window.map.render, window.map.error);
 });
 
