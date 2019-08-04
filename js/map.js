@@ -83,8 +83,8 @@ mainPin.addEventListener('mousedown', function (evt) {
     var mainPinTop = mainPin.offsetTop - shift.y;
     var mainPinLeft = mainPin.offsetLeft - shift.x;
 
-    if (mainPinTop < LOCATION_BORDER_TOP) {
-      mainPinTop = LOCATION_BORDER_TOP;
+    if (mainPinTop < LOCATION_BORDER_TOP - PINS_HEIGHT) {
+      mainPinTop = LOCATION_BORDER_TOP - PINS_HEIGHT;
     }
 
     if (mainPinTop > LOCATION_BORDER_BOT - PINS_HEIGHT) {

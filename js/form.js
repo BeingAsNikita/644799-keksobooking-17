@@ -2,6 +2,7 @@
 
 (function() {
 var formAd = document.querySelector('.ad-form');
+var adTitle = document.querySelector('#title');
 var address = document.querySelector('#address');
 var typeOfHousing = document.querySelector('#type');
 var price = document.querySelector('#price');
@@ -13,12 +14,29 @@ var formResetButton = document.querySelector('.ad-form__reset');
 
 var isGuestsEqualsRooms = function() {
   var validMessage = checkCapacity(parseInt(rooms.value), parseInt(guests.value));
-  if (validMessage === '') {
-    rooms.setCustomValidity('');
-    return true
-  }
   rooms.setCustomValidity(validMessage);
-  return false
+  return validMessage ==='';
+}
+
+var checkTitleLength = function() {
+  var titleLength = adTitle.value.length;
+
+  if (titleLength < 30 || titleLength > 100) {
+    adTitle.setCustomValidity('Минимальная длина — 30 символов, максимальная длина — 100 символов.')
+  } else {
+   adTitle.setCustomValidity('');
+   return true
+  }
+}
+
+var checkRequired = function() {
+  priceLength = price.value.length
+    if (priceLength === 0 || priceLength === 'undefined') {
+    priceLength.setCustomValidity('Обязательное поле для заполнения')
+  } else {
+   priceLength.setCustomValidity('');
+   return true
+  }
 }
 
 var checkCapacity = function(numberOfRooms, numberOfGuests) {
@@ -45,8 +63,8 @@ var checkCapacity = function(numberOfRooms, numberOfGuests) {
   return message;
 }
 
-var onChangeTimeIn = function(evt) {
-  timeOut.value = evt.target.value;
+var onChangeTime = function(evt, element) {
+  element.value = evt.target.value;
 }
 
 var setTypeOfHousing = function() {
@@ -89,24 +107,33 @@ var successHandler = function() {
     window.utils.closingPopup(successPopup, document);
 }
 
-formResetButton.addEventListener('click', function() {
-  window.map.reset();
-})
+adTitle.addEventListener('change', checkTitleLength);
 
-typeOfHousing.addEventListener('change', function() {
-  setTypeOfHousing();
-})
+typeOfHousing.addEventListener('change', setTypeOfHousing);
 
-timeIn.addEventListener('change', onChangeTimeIn);
+timeIn.addEventListener('change', function(evt) {
+  onChangeTime(evt, timeOut)
+});
+
+timeOut.addEventListener('change', function(evt) {
+   onChangeTime(evt, timeIn)
+});
+
+guests.addEventListener('change', isGuestsEqualsRooms);
+
+rooms.addEventListener('change', isGuestsEqualsRooms);
+
+formResetButton.addEventListener('click', window.map.reset);
 
 formAd.addEventListener('submit', function(evt) {
-  if(isGuestsEqualsRooms()) {
+  evt.preventDefault();
+  if(isGuestsEqualsRooms() &&
+      checkTitleLength() &&
+      checkRequired()) {
     window.backend.send(new FormData(formAd), successHandler, errorHandler);
     window.map.reset();
   }
-  evt.preventDefault();
 });
-
 
 window.form = {
   getCoords: getAddressСoordinates,

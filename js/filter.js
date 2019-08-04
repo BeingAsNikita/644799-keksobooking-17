@@ -2,6 +2,8 @@
 
 (function() {
 
+var filterForm = document.querySelector('.map__filters');
+
 var housingType = document.querySelector('#housing-type');
 var housingPrice = document.querySelector('#housing-price');
 var housingRooms = document.querySelector('#housing-rooms');
@@ -20,8 +22,6 @@ var getCheckedFeatures = function() {
   }
   return activeFeatures
 }
-
-
 
 var filterAds = function(ads) {
   filteredAds = ads;
@@ -81,10 +81,7 @@ var filterAds = function(ads) {
   return filteredAds
 };
 
-
-
-
-housingType.addEventListener('change', function() {
+/*housingType.addEventListener('change', function() {
   window.utils.hidePins()
   window.backend.load(window.map.render, window.map.error);
 });
@@ -102,7 +99,12 @@ housingRooms.addEventListener('change', function() {
 housingGuests.addEventListener('change', function() {
   window.utils.hidePins()
   window.backend.load(window.map.render, window.map.error);
-});
+});*/
+
+filterForm.addEventListener('change', function() {
+  window.utils.hidePins()
+  window.backend.load(window.utils.debounce(window.map.render), window.map.error)
+})
 
 window.filter = {
   filter: filterAds
