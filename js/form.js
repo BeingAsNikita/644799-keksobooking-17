@@ -30,11 +30,12 @@ var checkTitleLength = function() {
 }
 
 var checkRequired = function() {
-  priceLength = price.value.length
-    if (priceLength === 0 || priceLength === 'undefined') {
-    priceLength.setCustomValidity('Обязательное поле для заполнения')
+ var priceLength = price.value.length
+  console.log(priceLength)
+    if (priceLength === 0) {
+    price.setCustomValidity('Обязательное поле для заполнения')
   } else {
-   priceLength.setCustomValidity('');
+   price.setCustomValidity('');
    return true
   }
 }
@@ -107,7 +108,10 @@ var successHandler = function() {
     window.utils.closingPopup(successPopup, document);
 }
 
+
 adTitle.addEventListener('change', checkTitleLength);
+
+price.addEventListener('change', checkRequired)
 
 typeOfHousing.addEventListener('change', setTypeOfHousing);
 
