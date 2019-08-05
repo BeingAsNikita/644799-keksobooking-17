@@ -16,7 +16,7 @@ var isGuestsEqualsRooms = function() {
   var validMessage = checkCapacity(parseInt(rooms.value), parseInt(guests.value));
   rooms.setCustomValidity(validMessage);
   return validMessage ==='';
-}
+};
 
 var checkTitleLength = function() {
   var titleLength = adTitle.value.length;
@@ -27,7 +27,7 @@ var checkTitleLength = function() {
    adTitle.setCustomValidity('');
    return true
   }
-}
+};
 
 var checkRequired = function() {
  var priceLength = price.value.length
@@ -37,7 +37,7 @@ var checkRequired = function() {
    price.setCustomValidity('');
    return true
   }
-}
+};
 
 var checkCapacity = function(numberOfRooms, numberOfGuests) {
   var message = '';
@@ -61,11 +61,11 @@ var checkCapacity = function(numberOfRooms, numberOfGuests) {
   }
 
   return message;
-}
+};
 
 var onChangeTime = function(evt, element) {
   element.value = evt.target.value;
-}
+};
 
 var setTypeOfHousing = function() {
   var min = 0;
@@ -86,26 +86,27 @@ var setTypeOfHousing = function() {
 
   price.setAttribute('min', min);
   price.setAttribute('placeholder', min);
-}
+};
 
 var getAddressСoordinates = function(left, top) {
   address.value = (parseInt(left, 10) + window.map.pinWidth/2) + ', ' + (parseInt(top, 10) + window.map.pinHeight);
-}
+};
 
 var errorHandler = function(errorMessage) {
   var errorPopup = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+  var tryAgainButton = document.querySelector('.error__button');
 
   errorPopup.querySelector('.error__message').textContent = errorMessage;
   document.querySelector('main').appendChild(errorPopup);
-
-}
+  window.utils.closingPopup(errorPopup, tryAgainButton);
+};
 
 var successHandler = function() {
     var successPopup = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
     document.querySelector('main').appendChild(successPopup);
 
     window.utils.closingPopup(successPopup, document);
-}
+};
 
 
 adTitle.addEventListener('change', checkTitleLength);

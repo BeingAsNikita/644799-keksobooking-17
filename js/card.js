@@ -8,7 +8,7 @@ var types = {
   bungalo: 'Бунгало',
   house: 'Дом',
   palace: 'Дворец'
-}
+};
 
 var addPhotos = function(ad, element) {
   var photos = ad.offer.photos;
@@ -67,6 +67,6 @@ var renderCard = function(ad) {
 
 window.card = {
   render: renderCard
-}
+};
 
 })();

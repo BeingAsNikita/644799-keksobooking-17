@@ -42,7 +42,6 @@ var renderAd = function(ad) {
 };
 
 var renderAds = function(ads) {
-  totalAds = window.filter.filter(ads);
 
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < Math.min(totalAds.length, ADS_COUNT_DEFAULT); i++) {
@@ -53,11 +52,16 @@ var renderAds = function(ads) {
   window.map.element.classList.remove('map--faded');
 };
 
+var successHandler = function(ads) {
+  totalAds = ads;
+  window.filter.filter();
+}
+
 var errorHandler = function() {
   var addErrorPopup = errorPopup.cloneNode(true);
   document.body.insertAdjacentElement('afterbegin', addErrorPopup);
-}
 
+};
 
 mainPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
@@ -108,7 +112,7 @@ mainPin.addEventListener('mousedown', function (evt) {
     if (!adsIsrender) {
       window.utils.setActive(formFieldsets,formAd);
       window.utils.setActive(formFilters,formAd);
-      window.backend.load(renderAds, errorHandler);
+      window.backend.load(successHandler, errorHandler);
       adsIsrender = true;
     }
 
@@ -135,7 +139,7 @@ var resetMap = function() {
   window.utils.setInactive(formFilters,formAd);
   map.classList.add('map--faded');
   adsIsrender = false;
-}
+};
 
 window.utils.setInactive(formFieldsets);
 window.utils.setInactive(formFilters);
@@ -150,7 +154,9 @@ window.map = {
   borderBot: LOCATION_BORDER_BOT,
   render: renderAds,
   error: errorHandler,
-  reset: resetMap
-}
+  success: successHandler,
+  reset: resetMap,
+  totalAds: totalAds
+};
 
 })();
