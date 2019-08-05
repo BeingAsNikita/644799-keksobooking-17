@@ -31,7 +31,6 @@ var checkTitleLength = function() {
 
 var checkRequired = function() {
  var priceLength = price.value.length
-  console.log(priceLength)
     if (priceLength === 0) {
     price.setCustomValidity('Обязательное поле для заполнения')
   } else {
