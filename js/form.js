@@ -23,44 +23,43 @@ var checkTitleLength = function() {
 
   if (titleLength < 30 || titleLength > 100) {
     adTitle.setCustomValidity('Минимальная длина — 30 символов, максимальная длина — 100 символов.')
-  } else {
+    return false
+  }
+
    adTitle.setCustomValidity('');
    return true
-  }
 };
 
 var checkRequired = function() {
  var priceLength = price.value.length
     if (priceLength === 0) {
     price.setCustomValidity('Обязательное поле для заполнения')
-  } else {
+    return false
+  }
+
    price.setCustomValidity('');
    return true
-  }
 };
 
 var checkCapacity = function(numberOfRooms, numberOfGuests) {
-  var message = '';
 
   if(numberOfRooms === 100 && numberOfGuests !== 0) {
-
-    message = '100 комнат - не для гостей';
-
-  } else if(numberOfRooms === 1 && numberOfGuests !== 1) {
-
-    message = '1 комната — «для 1 гостя»';
-
-  } else if (numberOfRooms === 2 && (numberOfGuests > 2 || numberOfGuests === 0)) {
-
-    message = '2 комнаты — «для 2 гостей» или «для 1 гостя»';
-
-  } else if (numberOfRooms === 3 && (numberOfGuests > 3 || numberOfGuests === 0)) {
-
-    message = '3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»';
-
+    return '100 комнат - не для гостей';
   }
 
-  return message;
+  if(numberOfRooms === 1 && numberOfGuests !== 1) {
+    return '1 комната — «для 1 гостя»';
+  }
+
+  if (numberOfRooms === 2 && (numberOfGuests > 2 || numberOfGuests === 0)) {
+    return '2 комнаты — «для 2 гостей» или «для 1 гостя»';
+  }
+
+  if (numberOfRooms === 3 && (numberOfGuests > 3 || numberOfGuests === 0)) {
+   return '3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»';
+  }
+
+  return '';
 };
 
 var onChangeTime = function(evt, element) {

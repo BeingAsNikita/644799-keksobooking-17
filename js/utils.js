@@ -5,19 +5,27 @@
 var ESC_KEYCODE = 27;
 var DEBOUNCE_INTERVAL = 500;
 var lastTimeout = null;
+var errorPopup = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
+var errorPopupMessage =  errorPopup.querySelector('.error__message')
+var tryAgainButton = errorPopup.querySelector('.error__button');
+var main = document.querySelector('main');
+var formAd = document.querySelector('.ad-form');
 
 var setInactiveMode = function (elements) {
-  for (var i = 0; i < elements.length; i++) {
-    elements[i].setAttribute('disabled', 'true');
-  }
+
+  Array.from(elements).forEach(function(it) {
+    it.setAttribute('disabled', 'true');
+  });
+
 };
 
 var setActiveMode = function (elements) {
-  for (var i = 0; i < elements.length; i++) {
-    elements[i].removeAttribute('disabled');
-  }
 
-  document.querySelector('.ad-form').classList.remove('ad-form--disabled');
+  Array.from(elements).forEach(function(it){
+    it.removeAttribute('disabled');
+  });
+
+  formAd.classList.remove('ad-form--disabled');
 };
 
 var isEscPressed = function(evt, callback, element) {
@@ -43,11 +51,12 @@ var closingPopup = function(element, closeButton) {
 
 var hidePins = function() {
   var activeAds = document.querySelectorAll('.map__pin');
-  for (var i = 0; i < activeAds.length; i++) {
-    if(!activeAds[i].classList.contains('map__pin--main')) {
-      activeAds[i].remove();
+
+  Array.from(activeAds).forEach(function(it) {
+    if(!it.classList.contains('map__pin--main')) {
+      it.remove();
     }
-  }
+  });
 };
 
 var debounce = function (cb) {
@@ -58,13 +67,9 @@ var debounce = function (cb) {
 }
 
 var defaultErrorHandler = function(errorMessage) {
-  var errorPopup = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
-  var tryAgainButton = errorPopup.querySelector('.error__button');
-
-  errorPopup.querySelector('.error__message').textContent = errorMessage;
-  document.querySelector('main').appendChild(errorPopup);
+  errorPopupMessage.textContent = errorMessage;
+  main.appendChild(errorPopup);
   window.utils.closingPopup(errorPopup, tryAgainButton);
-
 };
 
 window.utils = {
@@ -72,6 +77,7 @@ window.utils = {
   setInactive: setInactiveMode,
   isEscPressed: isEscPressed,
   closingPopup: closingPopup,
+  closePopup: onClosePopup,
   hidePins: hidePins,
   debounce: debounce,
   error: defaultErrorHandler,

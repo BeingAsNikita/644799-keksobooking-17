@@ -26,12 +26,15 @@ var totalAds = [];
 var adsIsRender = false;
 var formAd = document.querySelector('.ad-form');
 
+
 var renderAd = function(ad) {
   var adElement = pinTemplate.cloneNode(true);
+  var image = adElement.querySelector('img');
+
   adElement.style.left = ad.location.x + 'px';
   adElement.style.top = ad.location.y + 'px';
-  adElement.querySelector('img').src = ad.author.avatar;
-  adElement.querySelector('img').alt = 'Заголовок объявления';
+  image.src = ad.author.avatar;
+  image.alt = 'Заголовок объявления';
 
   adElement.addEventListener('click', function() {
     window.card.render(ad);
@@ -121,8 +124,12 @@ mainPin.addEventListener('mousedown', function (evt) {
 
 
 var resetMap = function() {
-  window.utils.hidePins()
+  var card = document.querySelector('.map__card');
+  if (card) {
+    window.utils.closePopup(card);
+  }
 
+  window.utils.hidePins()
   mainPin.style.top = MAIN_PIN_START_COORDS.y + 'px';
   mainPin.style.left = MAIN_PIN_START_COORDS.x + 'px';
 

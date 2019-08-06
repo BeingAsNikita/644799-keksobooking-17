@@ -13,14 +13,16 @@ var types = {
 var addPhotos = function(ad, element) {
   var photos = ad.offer.photos;
   var fragment = document.createDocumentFragment();
+  var photo = element.querySelector('.popup__photo');
 
-  for( var i = 0; i < photos.length; i++) {
-    var photo = element.querySelector('.popup__photo').cloneNode(true);
-    photo.src = photos[i];
-    fragment.appendChild(photo)
-  }
-   element.querySelector('.popup__photo').remove();
+  photos.forEach( function(it) {
+    var image = photo.cloneNode(true);
+    image.src = it;
+    fragment.appendChild(image);
+  })
+
    element.appendChild(fragment);
+   photo.remove();
 };
 
 var addFeatures = function(ad, element) {
@@ -31,11 +33,12 @@ var addFeatures = function(ad, element) {
     featuresList.removeChild(featuresList.firstChild);
   }
 
-  for (var i = 0; i < ad.offer.features.length; i++) {
+  ad.offer.features.forEach(function(it) {
     var li = document.createElement('li');
-    li.classList.add('popup__feature', 'popup__feature--' + ad.offer.features[i])
+    li.classList.add('popup__feature', 'popup__feature--' + it)
     fragment.appendChild(li)
-  }
+  })
+
   featuresList.appendChild(fragment);
 };
 
@@ -44,12 +47,12 @@ var renderCard = function(ad) {
   var cardElement = cardTemplate.cloneNode(true);
 
   if (card) {
-    card.remove();
+    window.utils.closePopup(card);
   }
 
   cardElement.querySelector('.popup__title').textContent = ad.offer.title;
   cardElement.querySelector('.popup__text--price').textContent = ad.offer.price + ' ₽/ночь';
-  cardElement.querySelector('.popup__text--address').textContent = ad.location.x + ', ' + ad.location.y;
+  cardElement.querySelector('.popup__text--address').textContent = ad.offer.address;
   cardElement.querySelector('.popup__type').textContent = types[ad.offer.type];
   cardElement.querySelector('.popup__text--capacity').textContent = ad.offer.rooms + ' комнаты для ' + ad.offer.guests + ' гостей.';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + ad.offer.checkin + ', выезд до ' + ad.offer.checkout;
