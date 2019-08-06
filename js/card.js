@@ -8,16 +8,19 @@ var types = {
   bungalo: 'Бунгало',
   house: 'Дом',
   palace: 'Дворец'
-}
+};
 
 var addPhotos = function(ad, element) {
   var photos = ad.offer.photos;
+  var fragment = document.createDocumentFragment();
 
   for( var i = 0; i < photos.length; i++) {
     var photo = element.querySelector('.popup__photo').cloneNode(true);
-    element.querySelector('.popup__photos').appendChild(photo).src = photos[i];
+    photo.src = photos[i];
+    fragment.appendChild(photo)
   }
    element.querySelector('.popup__photo').remove();
+   element.appendChild(fragment);
 };
 
 var addFeatures = function(ad, element) {
@@ -35,8 +38,6 @@ var addFeatures = function(ad, element) {
   }
   featuresList.appendChild(fragment);
 };
-
-
 
 var renderCard = function(ad) {
   var card = document.querySelector('.map__card');
@@ -66,6 +67,6 @@ var renderCard = function(ad) {
 
 window.card = {
   render: renderCard
-}
+};
 
 })();

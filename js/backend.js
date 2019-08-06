@@ -30,7 +30,7 @@ var getData = function(onLoad, onError) {
   xhr.open('GET', GET_URL);
   xhr.send();
 
-}
+};
 
 var sendData = function(data, onLoad, onError) {
   var xhr = new XMLHttpRequest();
@@ -56,11 +56,11 @@ var sendData = function(data, onLoad, onError) {
 
   xhr.open('POST', SEND_URL);
   xhr.send(data);
-}
+};
 
 window.backend = {
   load: getData,
   send: sendData
-}
+};
 
 })();

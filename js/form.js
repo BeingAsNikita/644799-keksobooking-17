@@ -2,6 +2,7 @@
 
 (function() {
 var formAd = document.querySelector('.ad-form');
+var adTitle = document.querySelector('#title');
 var address = document.querySelector('#address');
 var typeOfHousing = document.querySelector('#type');
 var price = document.querySelector('#price');
@@ -13,13 +14,30 @@ var formResetButton = document.querySelector('.ad-form__reset');
 
 var isGuestsEqualsRooms = function() {
   var validMessage = checkCapacity(parseInt(rooms.value), parseInt(guests.value));
-  if (validMessage === '') {
-    rooms.setCustomValidity('');
-    return true
-  }
   rooms.setCustomValidity(validMessage);
-  return false
-}
+  return validMessage ==='';
+};
+
+var checkTitleLength = function() {
+  var titleLength = adTitle.value.length;
+
+  if (titleLength < 30 || titleLength > 100) {
+    adTitle.setCustomValidity('Минимальная длина — 30 символов, максимальная длина — 100 символов.')
+  } else {
+   adTitle.setCustomValidity('');
+   return true
+  }
+};
+
+var checkRequired = function() {
+ var priceLength = price.value.length
+    if (priceLength === 0) {
+    price.setCustomValidity('Обязательное поле для заполнения')
+  } else {
+   price.setCustomValidity('');
+   return true
+  }
+};
 
 var checkCapacity = function(numberOfRooms, numberOfGuests) {
   var message = '';
@@ -43,11 +61,11 @@ var checkCapacity = function(numberOfRooms, numberOfGuests) {
   }
 
   return message;
-}
+};
 
-var onChangeTimeIn = function(evt) {
-  timeOut.value = evt.target.value;
-}
+var onChangeTime = function(evt, element) {
+  element.value = evt.target.value;
+};
 
 var setTypeOfHousing = function() {
   var min = 0;
@@ -68,45 +86,49 @@ var setTypeOfHousing = function() {
 
   price.setAttribute('min', min);
   price.setAttribute('placeholder', min);
-}
+};
 
 var getAddressСoordinates = function(left, top) {
   address.value = (parseInt(left, 10) + window.map.pinWidth/2) + ', ' + (parseInt(top, 10) + window.map.pinHeight);
-}
-
-var errorHandler = function(errorMessage) {
-  var errorPopup = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
-
-  errorPopup.querySelector('.error__message').textContent = errorMessage;
-  document.querySelector('main').appendChild(errorPopup);
-
-}
+};
 
 var successHandler = function() {
     var successPopup = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
     document.querySelector('main').appendChild(successPopup);
 
     window.utils.closingPopup(successPopup, document);
-}
+};
 
-formResetButton.addEventListener('click', function() {
-  window.map.reset();
-})
 
-typeOfHousing.addEventListener('change', function() {
-  setTypeOfHousing();
-})
+adTitle.addEventListener('change', checkTitleLength);
 
-timeIn.addEventListener('change', onChangeTimeIn);
+price.addEventListener('change', checkRequired)
 
-formAd.addEventListener('submit', function(evt) {
-  if(isGuestsEqualsRooms()) {
-    window.backend.send(new FormData(formAd), successHandler, errorHandler);
-    window.map.reset();
-  }
-  evt.preventDefault();
+typeOfHousing.addEventListener('change', setTypeOfHousing);
+
+timeIn.addEventListener('change', function(evt) {
+  onChangeTime(evt, timeOut)
 });
 
+timeOut.addEventListener('change', function(evt) {
+   onChangeTime(evt, timeIn)
+});
+
+guests.addEventListener('change', isGuestsEqualsRooms);
+
+rooms.addEventListener('change', isGuestsEqualsRooms);
+
+formResetButton.addEventListener('click', window.map.reset);
+
+formAd.addEventListener('submit', function(evt) {
+  evt.preventDefault();
+  if(isGuestsEqualsRooms() &&
+      checkTitleLength() &&
+      checkRequired()) {
+    window.backend.send(new FormData(formAd), successHandler, window.utils.error);
+    window.map.reset();
+  }
+});
 
 window.form = {
   getCoords: getAddressСoordinates,
