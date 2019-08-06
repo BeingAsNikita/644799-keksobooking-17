@@ -92,15 +92,6 @@ var getAddressСoordinates = function(left, top) {
   address.value = (parseInt(left, 10) + window.map.pinWidth/2) + ', ' + (parseInt(top, 10) + window.map.pinHeight);
 };
 
-var errorHandler = function(errorMessage) {
-  var errorPopup = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
-  var tryAgainButton = document.querySelector('.error__button');
-
-  errorPopup.querySelector('.error__message').textContent = errorMessage;
-  document.querySelector('main').appendChild(errorPopup);
-  window.utils.closingPopup(errorPopup, tryAgainButton);
-};
-
 var successHandler = function() {
     var successPopup = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
     document.querySelector('main').appendChild(successPopup);
@@ -134,7 +125,7 @@ formAd.addEventListener('submit', function(evt) {
   if(isGuestsEqualsRooms() &&
       checkTitleLength() &&
       checkRequired()) {
-    window.backend.send(new FormData(formAd), successHandler, errorHandler);
+    window.backend.send(new FormData(formAd), successHandler, window.utils.error);
     window.map.reset();
   }
 });

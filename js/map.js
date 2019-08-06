@@ -22,9 +22,8 @@ var formFieldsets = document.querySelectorAll('fieldset');
 var formFilters = document.querySelector('.map__filters').querySelectorAll('*');
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var pins = document.querySelector('.map__pins');
-var errorPopup = document.querySelector('#error').content.querySelector('.error');
 var totalAds = [];
-var adsIsrender = false;
+var adsIsRender = false;
 var formAd = document.querySelector('.ad-form');
 
 var renderAd = function(ad) {
@@ -52,16 +51,10 @@ var renderAds = function(ads) {
   window.map.element.classList.remove('map--faded');
 };
 
-var successHandler = function(ads) {
-  totalAds = ads;
-  window.filter.filter();
+var successHandler = function(data) {
+  window.filter.init(data)
 }
 
-var errorHandler = function() {
-  var addErrorPopup = errorPopup.cloneNode(true);
-  document.body.insertAdjacentElement('afterbegin', addErrorPopup);
-
-};
 
 mainPin.addEventListener('mousedown', function (evt) {
   evt.preventDefault();
@@ -109,11 +102,11 @@ mainPin.addEventListener('mousedown', function (evt) {
 
   var onMouseUp = function (upEvt) {
     upEvt.preventDefault();
-    if (!adsIsrender) {
-      window.utils.setActive(formFieldsets,formAd);
-      window.utils.setActive(formFilters,formAd);
-      window.backend.load(successHandler, errorHandler);
-      adsIsrender = true;
+    if (!adsIsRender) {
+      window.utils.setActive(formFieldsets);
+      window.utils.setActive(formFilters);
+      window.backend.load(successHandler, window.utils.error);
+      adsIsRender = true;
     }
 
     window.form.getCoords(mainPin.style.left, mainPin.style.top);
@@ -135,10 +128,10 @@ var resetMap = function() {
 
   formAd.reset();
   formAd.classList.add('ad-form--disabled');
-  window.utils.setInactive(formFieldsets,formAd);
-  window.utils.setInactive(formFilters,formAd);
+  window.utils.setInactive(formFieldsets);
+  window.utils.setInactive(formFilters);
   map.classList.add('map--faded');
-  adsIsrender = false;
+  adsIsRender = false;
 };
 
 window.utils.setInactive(formFieldsets);
@@ -153,7 +146,6 @@ window.map = {
   borderTop: LOCATION_BORDER_TOP,
   borderBot: LOCATION_BORDER_BOT,
   render: renderAds,
-  error: errorHandler,
   success: successHandler,
   reset: resetMap,
   totalAds: totalAds
