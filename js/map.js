@@ -44,8 +44,8 @@ var renderAd = function(ad) {
 var renderAds = function(ads) {
 
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < Math.min(totalAds.length, ADS_COUNT_DEFAULT); i++) {
-    fragment.appendChild(renderAd(totalAds[i]));
+  for (var i = 0; i < Math.min(ads.length, ADS_COUNT_DEFAULT); i++) {
+    fragment.appendChild(renderAd(ads[i]));
   }
 
   pins.appendChild(fragment);
