@@ -91,14 +91,6 @@ var getAddressСoordinates = function(left, top) {
   address.value = (parseInt(left, 10) + window.map.pinWidth/2) + ', ' + (parseInt(top, 10) + window.map.pinHeight);
 };
 
-var successHandler = function() {
-    var successPopup = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
-    document.querySelector('main').appendChild(successPopup);
-
-    window.utils.closingPopup(successPopup, document);
-};
-
-
 adTitle.addEventListener('change', checkTitleLength);
 
 price.addEventListener('change', checkRequired)
@@ -124,7 +116,7 @@ formAd.addEventListener('submit', function(evt) {
   if(isGuestsEqualsRooms() &&
       checkTitleLength() &&
       checkRequired()) {
-    window.backend.send(new FormData(formAd), successHandler, window.utils.error);
+    window.backend.send(new FormData(formAd), window.utils.success, window.utils.error);
     window.map.reset();
   }
 });

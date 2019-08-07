@@ -25,6 +25,24 @@ var addPhotos = function(ad, element) {
    photo.remove();
 };
 
+var onEscPress = function(evt) {
+  evt.preventDefault();
+  window.utils.isEscPressed(evt, removeCard);
+};
+
+var removeCard = function() {
+  var card = document.querySelector('.map__card');
+  card.remove()
+  document.removeEventListener('keydown', onEscPress);
+}
+
+var onClickRemove = function(closeButton, element) {
+  closeButton.addEventListener('click', function() {
+  element.remove();
+  document.removeEventListener('keydown', onEscPress);
+  });
+};
+
 var addFeatures = function(ad, element) {
   var featuresList = element.querySelector('.popup__features');
   var fragment = document.createDocumentFragment();
@@ -45,6 +63,7 @@ var addFeatures = function(ad, element) {
 var renderCard = function(ad) {
   var card = document.querySelector('.map__card');
   var cardElement = cardTemplate.cloneNode(true);
+  var cardCloseButton = cardElement.querySelector('.popup__close');
 
   if (card) {
     window.utils.closePopup(card);
@@ -63,9 +82,9 @@ var renderCard = function(ad) {
 
   window.map.element.appendChild(cardElement);
 
-  var cardCloseButton = cardElement.querySelector('.popup__close');
+  document.addEventListener('keydown', onEscPress);
+  onClickRemove(cardCloseButton,cardElement);
 
-  window.utils.closingPopup(cardElement,cardCloseButton);
 };
 
 window.card = {

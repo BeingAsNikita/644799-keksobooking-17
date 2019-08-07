@@ -18,22 +18,11 @@ var getCheckedFeatures = function() {
 
   Array.from(features).forEach(function(it) {
     if(it.checked) {
-      activeFeatures.push(it.value)
+      activeFeatures.push(it.value);
     }
   });
 
   return activeFeatures
-};
-
-var isContains = function(where, what){
-
-  for(var i = 0; i < what.length; i++){
-    if(where.indexOf(what[i]) === -1) {
-      return false;
-    }
-  }
-
-  return true;
 };
 
 var getFilteredAds = function() {
@@ -42,11 +31,14 @@ var getFilteredAds = function() {
    return (housingType.value === 'any' || it.offer.type === housingType.value) &&
           (housingRooms.value === 'any' || it.offer.rooms === parseInt(housingRooms.value)) &&
           (housingGuests.value === 'any' || it.offer.guests === parseInt(housingGuests.value)) &&
-          (checkedFeatures.length === 0 || isContains(it.offer.features, checkedFeatures)) &&
+          (checkedFeatures.length === 0 || checkedFeatures.every(function(el){
+                                              return it.offer.features.indexOf(el) !== -1
+                                            })) &&
           (housingPrice.value === 'any' || (housingPrice.value === 'low' && it.offer.price < 10000) ||
              (housingPrice.value === 'high' && it.offer.price >= 50000) ||
              (housingPrice.value === 'middle' && (it.offer.price > 10000 && it.offer.price < 50000)))
         });
+
 
   return result;
 };

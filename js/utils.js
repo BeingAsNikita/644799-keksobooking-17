@@ -8,6 +8,7 @@ var lastTimeout = null;
 var errorPopup = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
 var errorPopupMessage =  errorPopup.querySelector('.error__message')
 var tryAgainButton = errorPopup.querySelector('.error__button');
+var successPopup = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
 var main = document.querySelector('main');
 var formAd = document.querySelector('.ad-form');
 
@@ -28,24 +29,30 @@ var setActiveMode = function (elements) {
   formAd.classList.remove('ad-form--disabled');
 };
 
-var isEscPressed = function(evt, callback, element) {
+var  isEscEvent = function (evt, action) {
   if (evt.keyCode === ESC_KEYCODE) {
-    callback(element);
+    action();
   }
 };
 
-var onClosePopup = function(element) {
-  element.remove()
+var onEscPress = function(evt) {
+  evt.preventDefault();
+  isEscEvent(evt, removePopup);
 };
 
-var closingPopup = function(element, closeButton) {
-  document.addEventListener('keydown', function(evt) {
-    isEscPressed(evt, onClosePopup, element);
-  });
+var removePopup = function() {
+  if(errorPopup) {
+    errorPopup.remove();
+  }
+  if(successPopup) {
+    successPopup.remove();
+  }
+  document.removeEventListener('keydown', onEscPress);
+}
 
+var onClickRemove = function(closeButton) {
   closeButton.addEventListener('click', function() {
-    onClosePopup(element)
-    document.removeEventListener('keydown', isEscPressed, element);
+    removePopup()
   });
 };
 
@@ -69,18 +76,25 @@ var debounce = function (cb) {
 var defaultErrorHandler = function(errorMessage) {
   errorPopupMessage.textContent = errorMessage;
   main.appendChild(errorPopup);
-  window.utils.closingPopup(errorPopup, tryAgainButton);
+  document.addEventListener('keydown', onEscPress);
+  onClickRemove(tryAgainButton);
+  onClickRemove(document);
+};
+
+var defaultSuccessHandler = function() {
+  main.appendChild(successPopup);
+  document.addEventListener('keydown', onEscPress);
+  onClickRemove(document);
 };
 
 window.utils = {
   setActive: setActiveMode,
   setInactive: setInactiveMode,
-  isEscPressed: isEscPressed,
-  closingPopup: closingPopup,
-  closePopup: onClosePopup,
+  isEscPressed: isEscEvent,
   hidePins: hidePins,
   debounce: debounce,
   error: defaultErrorHandler,
+  success: defaultSuccessHandler
 };
 
 })();
