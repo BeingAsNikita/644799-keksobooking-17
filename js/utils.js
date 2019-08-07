@@ -7,7 +7,6 @@ var DEBOUNCE_INTERVAL = 500;
 var lastTimeout = null;
 var errorPopup = document.querySelector('#error').content.querySelector('.error').cloneNode(true);
 var errorPopupMessage =  errorPopup.querySelector('.error__message')
-var tryAgainButton = errorPopup.querySelector('.error__button');
 var successPopup = document.querySelector('#success').content.querySelector('.success').cloneNode(true);
 var main = document.querySelector('main');
 var formAd = document.querySelector('.ad-form');
@@ -37,7 +36,10 @@ var  isEscEvent = function (evt, action) {
 
 var onEscPress = function(evt) {
   evt.preventDefault();
-  isEscEvent(evt, removePopup);
+  isEscEvent(evt, function(){
+    removePopup()
+    document.removeEventListener('keydown', onEscPress);
+  })
 };
 
 var removePopup = function() {
@@ -49,12 +51,6 @@ var removePopup = function() {
   }
   document.removeEventListener('keydown', onEscPress);
 }
-
-var onClickRemove = function(closeButton) {
-  closeButton.addEventListener('click', function() {
-    removePopup()
-  });
-};
 
 var hidePins = function() {
   var activeAds = document.querySelectorAll('.map__pin');
@@ -74,17 +70,20 @@ var debounce = function (cb) {
 }
 
 var defaultErrorHandler = function(errorMessage) {
+  var tryAgainButton = errorPopup.querySelector('.error__button');
+
   errorPopupMessage.textContent = errorMessage;
   main.appendChild(errorPopup);
   document.addEventListener('keydown', onEscPress);
-  onClickRemove(tryAgainButton);
-  onClickRemove(document);
+
+  tryAgainButton.addEventListener('click', removePopup)
+  document.addEventListener('click', removePopup)
 };
 
 var defaultSuccessHandler = function() {
   main.appendChild(successPopup);
   document.addEventListener('keydown', onEscPress);
-  onClickRemove(document);
+  document.addEventListener('click', removePopup)
 };
 
 window.utils = {

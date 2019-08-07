@@ -69,7 +69,6 @@ mainPin.addEventListener('mousedown', function (evt) {
 
   var onMouseMove = function (moveEvt) {
     moveEvt.preventDefault();
-    window.form.getCoords(mainPin.style.left, mainPin.style.top);
 
     var shift = {
       x: startCoords.x - moveEvt.clientX,
@@ -102,6 +101,7 @@ mainPin.addEventListener('mousedown', function (evt) {
 
     mainPin.style.top = mainPinTop + 'px';
     mainPin.style.left = mainPinLeft + 'px';
+    window.form.getCoords(mainPin.style.left, mainPin.style.top);
   };
 
   var onMouseUp = function (upEvt) {
